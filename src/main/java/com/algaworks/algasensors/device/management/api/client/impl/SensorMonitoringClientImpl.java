@@ -1,7 +1,9 @@
 package com.algaworks.algasensors.device.management.api.client.impl;
 
 import com.algaworks.algasensors.device.management.api.client.SensorMonitoringClient;
+import com.algaworks.algasensors.device.management.api.client.SensorMonitoringClientBadGatewayException;
 import io.hypersistence.tsid.TSID;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -11,7 +13,11 @@ public class SensorMonitoringClientImpl implements SensorMonitoringClient {
     private final RestClient restClient;
 
     public SensorMonitoringClientImpl(RestClient.Builder builder) {
+        //Com isso qualquer erro que o RestClient venha a tratar, erros do tipo 400..., 500, vai cair nesse método e a excessão será transformada na excessão SensorMonitoringClientBadGatewayException
         this.restClient = builder.baseUrl("http://localhost:8082")
+                .defaultStatusHandler(HttpStatusCode::isError, ((request, response) -> {
+                    throw new SensorMonitoringClientBadGatewayException();
+                }))
                 .build();
     }
 
