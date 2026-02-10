@@ -13,7 +13,9 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Duration;
 
-@Component
+//Pelo que foi desenvolvido no commit 11.7., agora essa classe pode ser apagada...
+//Comentando o Compoment faz com que ele/essa classe não seja mais utilizado pelo Spring, não vai mais ser instanciado.
+//@Component
 public class SensorMonitoringClientImpl implements SensorMonitoringClient {
 
     private final RestClient restClient;
